@@ -96,13 +96,67 @@ class Douyin850Api
             ->getBody()
             ->getContents();
 
-        $resArr =  json_decode($resJson, 1);
+        $resArr = json_decode($resJson, 1);
 
-        if ($resArr['status_code'] === 0){
+        if ($resArr['status_code'] === 0) {
             return $resArr;
         }
-        dd($resArr);
+
         throw new \Exception($resJson);
+    }
+
+    public function updateSubPid($subPid, $cookie)
+    {
+        $url = 'https://lianmeng.snssdk.com/user/subpid/updateSubpid';
+
+        $query = [
+            'b_type_new' => '1',
+            'pid_type' => 1,
+            'sub_pid' => $subPid,
+            'request_tag_from' => 'h5',
+            'os_api' => '23',
+            'device_type' => 'MX6',
+            'device_platform' => 'android',
+            'ssmix' => 'a',
+            'iid' => '108510299300',
+            'manifest_version_code' => '850',
+            'dpi' => '480',
+            'version_code' => '850',
+            'app_name' => 'aweme',
+            'version_name' => '8.5.0',
+            'ts' => '1584773858',
+            'openudid' => 'fda26571d3114761',
+            'device_id' => '67947929528',
+            'resolution' => '1080*1920',
+            'os_version' => '6.0',
+            'language' => 'zh',
+            'device_brand' => 'Meizu',
+            'app_type' => 'normal',
+            'ac' => 'wifi',
+            'update_version_code' => '8502',
+            'aid' => '1127',
+            'channel' => 'xiaomi',
+            '_rticket' => '1584773858966',
+            'mcc_mnc' => '46000'
+        ];
+
+        $resJson = $this->client->request('GET', $url, [
+            'query' => $query,
+            'headers' => [
+                'cookie' => $cookie,
+            ]
+        ])
+            ->getBody()
+            ->getContents();
+
+        $resArr = json_decode($resJson, 1);
+
+        if ($resArr['msg'] === 'success') {
+            return $resArr;
+        }
+
+        throw new \Exception($resJson);
+
     }
 
     protected function bindQuery($url, array $query)
